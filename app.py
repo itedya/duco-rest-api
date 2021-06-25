@@ -24,7 +24,7 @@ from flask_caching import Cache
 config = {
     "DEBUG": False,
     "CACHE_TYPE": "SimpleCache",
-    "CACHE_DEFAULT_TIMEOUT": 300
+    "CACHE_DEFAULT_TIMEOUT": 5
 }
 
 app = Flask(__name__)
@@ -179,7 +179,6 @@ def _sql_fetch_all(db: str, statement: str, args: tuple = ()):
 
 
 @app.route("/users/<username>")
-@cache.memoize(500)
 def api_get_user_objects(username: str):
     miners = _get_user_miners(username)
 
@@ -236,7 +235,7 @@ def _fetch_balances():
 
 
 @app.route("/balances")
-@cache.cached(timeout=50)
+@cache.cached(timeout=5)
 def api_get_balances():
     if 'username' in request.args:
         return api_get_user_balance(request.args['username'])
@@ -268,7 +267,6 @@ def _get_user_balance(username: str):
 
 
 @app.route("/balances/<username>")
-@cache.memoize(500)
 def api_get_user_balance(username: str):
     if use_cache:
         balances = _fetch_balances()
@@ -344,7 +342,7 @@ def _fetch_transactions():
 
 
 @app.route("/transactions")
-@cache.cached(timeout=50)
+@cache.cached(timeout=5)
 def api_get_transactions():
 
     username = request.args.get('username', None)
@@ -443,7 +441,6 @@ def _get_transaction(hash_id: str):
 
 
 @app.route("/transactions/<hash_id>")
-@cache.memoize(500)
 def api_get_transaction(hash_id):
     try:
         transaction = _get_transaction(hash_id)
@@ -491,6 +488,7 @@ def _fetch_miners():
 
     minersapi = miners
     last_miner_update = time()
+    print(f'done fetching miners from {CONFIG_MINERAPI}')
 
 
 def _get_miners():
@@ -504,7 +502,7 @@ def _get_miners():
 
 
 @app.route("/miners")
-@cache.cached(timeout=50)
+@cache.cached(timeout=5)
 def api_get_miners():
     return _success(_get_miners())
 
@@ -523,7 +521,6 @@ def _get_miner(threadid):
 
 
 @app.route("/miners/<threadid>")
-@cache.memoize(500)
 def api_get_miner(threadid):
     return _success(_get_miner(threadid))
 
@@ -569,7 +566,7 @@ def formatted_hashrate(hashrate: int, accuracy: int):
 
 
 @app.route("/statistics")
-@cache.cached(timeout=50)
+@cache.cached(timeout=5)
 def get_api_data():
     # Return API Data object
     return jsonify(_get_api_data())
