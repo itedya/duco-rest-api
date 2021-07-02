@@ -1,5 +1,5 @@
-import multiprocessing
-
 bind = "0.0.0.0:5000"
-workers = multiprocessing.cpu_count() * 2 + 1
-worker_class = 'gevent'
+workers = 10
+worker_class = "gevent"
+keyfile = "/etc/letsencrypt/live/server.duinocoin.com/privkey.pem"
+certfile = "/etc/letsencrypt/live/server.duinocoin.com/fullchain.pem"
