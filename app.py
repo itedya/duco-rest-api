@@ -228,34 +228,59 @@ def api_get_user_objects(username: str):
     return _success(result)
 
 
+@app.route("/transactions/<hash>")
+@cache.cached()
+def get_transaction_by_hash(hash: str):
+    # Get all transactions
+    try:
+        transactions = get_all_transactions()
+        for user in transactions:
+            for transaction in transactions[user]:
+                if  transaction["hash"] == hash:
+                    return _success(transaction)
+        return _success("No transaction found")
+    except Exception as e:
+        return _error(str(e))
+
+
 @app.route("/balances/<username>")
 @cache.cached()
 def api_get_user_balance(username: str):
-    return _success(get_balance(username))
-
+    try:
+        return _success(get_balance(username))
+    except Exception as e:
+        return _error(str(e))
 
 @app.route("/balances")
 @cache.cached()
 def api_get_all_balances():
-    return _success(get_all_balances())
+    try:
+        return _success(get_all_balances())
+    except Exception as e:
+        return _error(str(e))
 
 
 @app.route("/transactions")
 @cache.cached()
 def api_get_all_transactions():
-    return _success(get_all_transactions())
+    try:
+        return _success(get_all_transactions())
+    except Exception as e:
+        return _error(str(e))
 
 
 @app.route("/miners")
 @cache.cached()
 def api_get_all_miners():
-    return _success(get_all_miners())
+    try:
+        return _success(get_all_miners())
+    except Exception as e:
+        return _error(str(e))
 
 
 @app.route("/statistics")
 @cache.cached()
 def get_api_data():
-    # Return API Data object
     data = {}
     with open(API_JSON_URI, 'r') as f:
         try:
