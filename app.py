@@ -25,9 +25,10 @@ from flask_caching import Cache
 config = {
     "DEBUG": False,
     "CACHE_TYPE": "SimpleCache",
-    "CACHE_DEFAULT_TIMEOUT": 10
+    "CACHE_DEFAULT_TIMEOUT": 5
 }
-DB_TIMEOUT = 3
+DB_TIMEOUT = 5
+SAVE_TIME = 5
 app = Flask(__name__)
 app.config.from_mapping(config)
 cache = Cache(app)
@@ -65,44 +66,40 @@ def get_all_transactions():
     global transactions
 
     now = time()
-    if now - last_balances_update < SAVE_TIME*3:
+    if now - last_balances_update < SAVE_TIME*2:
         pass
         # print(f'returning a copy of transactions')
     else:
-        with sqlconn(CONFIG_TRANSACTIONS, timeout=DB_TIMEOUT) as conn:
-            print(f'fetching transactions from {DATABASE}')
-            datab = conn.cursor()
-            datab.execute("SELECT * FROM Transactions")
-            rows = datab.fetchall()
-            print(f'done fetching transactions from {DATABASE}')
+        try:
+            with sqlconn(CONFIG_TRANSACTIONS, timeout=DB_TIMEOUT) as conn:
+                print(f'fetching transactions from {DATABASE}')
+                datab = conn.cursor()
+                datab.execute("SELECT * FROM Transactions")
+                rows = datab.fetchall()
+                print(f'done fetching transactions from {DATABASE}')
 
-        transactions = {}
-        for row in rows:
-            try:
-                transactions[row[1]].append(row_to_transaction(row))
-            except:
-                transactions[row[1]] = []
-                transactions[row[1]].append(row_to_transaction(row))
+            transactions = {}
+            for row in rows:
+                transactions[row[4]] = row_to_transaction(row)
 
-        last_transactions_update = time()
+            last_transactions_update = time()
+        except:
+            pass
 
     return transactions
 
 
 def get_transactions(username: str):
-    # Get all transactions
-    username = request.args.get('username', username)
-    sender = request.args.get('sender', None)
-    recipient = request.args.get('recipient', None)
-
+    # transactions for user
     transactions = get_all_transactions()
 
-    if username:
-        return transactions[username]
-    elif sender:
-        return transactions[sender]
-    else:
-        return transactions[recipient]
+    user_transactions = []
+    for transaction in transactions:
+        if (transactions[transaction]["sender"] == username
+            or transactions[transaction]["recipient"] == username):
+            user_transactions.append(transactions[transaction])
+
+    return user_transactions
 
 
 def row_to_miner(row):
@@ -125,35 +122,46 @@ def get_all_miners():
     global miners
 
     now = time()
-    if now - last_miners_update < SAVE_TIME*3:
+    if now - last_miners_update < SAVE_TIME*2:
         pass
         # print(f'returning a copy of miners')
     else:
-        with sqlconn(CONFIG_MINERAPI, timeout=DB_TIMEOUT) as conn:
-            print(f'fetching transactions from {DATABASE}')
-            datab = conn.cursor()
-            datab.execute("SELECT * FROM Miners")
-            rows = datab.fetchall()
-            print(f'done fetching miners from {DATABASE}')
+        try:
+            with sqlconn(CONFIG_MINERAPI, timeout=DB_TIMEOUT) as conn:
+                print(f'fetching miners from {DATABASE}')
+                datab = conn.cursor()
+                datab.execute("SELECT * FROM Miners")
+                rows = datab.fetchall()
+                print(f'done fetching miners from {DATABASE}')
 
-        miners = {}
-        for row in rows:
-            try:
-                miners[row[1]].append(row_to_miner(row))
-            except:
-                miners[row[1]] = []
-                miners[row[1]].append(row_to_miner(row))
+            miners = {}
+            for row in rows:
+                try:
+                    miners[row[1]].append(row_to_miner(row))
+                except:
+                    miners[row[1]] = []
+                    miners[row[1]].append(row_to_miner(row))
 
-        last_miners_update = time()
+            last_miners_update = time()
+        except:
+            pass
 
     return miners
 
 
-def get_miners(username: str):
+@app.route("/miners/<username>")
+@cache.cached()
+def get_miners_api(username: str):
     # Get all miners
+    try:
+        miners = get_all_miners()
+        return _success(miners[username])
+    except:
+        return _error("No miners detected on that account")
 
+def get_miners(username: str):
+    # For /users/
     miners = get_all_miners()
-
     return miners[username]
 
 
@@ -202,22 +210,19 @@ def get_balance(username: str):
 @cache.cached()
 def api_get_user_objects(username: str):
     try:
+        balance = get_balance(username)
+    except Exception as e:
+        return _error("This user doesn't exist")
+
+    try:
         miners = get_miners(username)
     except Exception as e:
         miners = []
-        #miners = str(traceback.format_exc())
 
     try:
         transactions = get_transactions(username)
     except Exception as e:
         transactions = []
-        #transactions = str(traceback.format_exc())
-
-    try:
-        balance = get_balance(username)
-    except Exception as e:
-        balance = []
-        #balance = str(traceback.format_exc())
 
     result = {
         'balance': balance,
@@ -234,13 +239,12 @@ def get_transaction_by_hash(hash: str):
     # Get all transactions
     try:
         transactions = get_all_transactions()
-        for user in transactions:
-            for transaction in transactions[user]:
-                if  transaction["hash"] == hash:
-                    return _success(transaction)
+        for transaction in transactions:
+            if transactions[transaction]["hash"] == hash:
+                return _success(transactions[transaction])
         return _success("No transaction found")
     except Exception as e:
-        return _error(str(e))
+        return _error("This transaction doesn't exist")
 
 
 @app.route("/balances/<username>")
@@ -249,7 +253,7 @@ def api_get_user_balance(username: str):
     try:
         return _success(get_balance(username))
     except Exception as e:
-        return _error(str(e))
+        return _error("This user doesn't exist")
 
 @app.route("/balances")
 @cache.cached()
@@ -257,7 +261,7 @@ def api_get_all_balances():
     try:
         return _success(get_all_balances())
     except Exception as e:
-        return _error(str(e))
+        return _error("Error fetching balances: " + str(e))
 
 
 @app.route("/transactions")
@@ -266,7 +270,7 @@ def api_get_all_transactions():
     try:
         return _success(get_all_transactions())
     except Exception as e:
-        return _error(str(e))
+        return _error("Error fetching transactions: " + str(e))
 
 
 @app.route("/miners")
@@ -275,7 +279,7 @@ def api_get_all_miners():
     try:
         return _success(get_all_miners())
     except Exception as e:
-        return _error(str(e))
+        return _error("Error fetching miners: " + str(e))
 
 
 @app.route("/statistics")
