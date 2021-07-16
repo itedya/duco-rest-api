@@ -4,39 +4,57 @@ module.exports = class createPoolListTable1626449873782 {
 
     async up(queryRunner) {
         queryRunner.createTable(new Table({
-            name: "PoolList",
+            name: "pool_list",
             columns: [
                 {
                     name: "identifier",
-                    type: "text"
+                    type: "varchar",
+                    max: 255,
+                    isPrimary: true
                 },
                 {
                     name: "name",
-                    type: "text"
+                    type: "varchar",
+                    max: 255,
+                    isNullable: false
                 },
                 {
                     name: "ip",
-                    type: "text"
+                    type: "varchar",
+                    max: 15,
+                    isNullable: false
                 },
                 {
                     name: "port",
-                    type: "text"
+                    type: "int",
+                    max: 65535,
+                    isNullable: false,
+                    unsigned: true
                 },
                 {
-                    name: "Status",
-                    type: "text"
+                    name: "status",
+                    type: "int",
+                    max: 20,
+                    isNullable: false,
+                    unsigned: true
                 },
                 {
                     name: "hidden",
-                    type: "text"
+                    type: "boolean",
+                    isNullable: false,
+                    unsigned: true
                 },
                 {
                     name: "cpu",
-                    type: "real"
+                    type: "real",
+                    isNullable: true,
+                    unsigned: true
                 },
                 {
                     name: "ram",
-                    type: "real"
+                    type: "real",
+                    isNullable: true,
+                    unsigned: true
                 }
             ]
         }), true)

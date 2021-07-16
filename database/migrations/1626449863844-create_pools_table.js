@@ -1,26 +1,37 @@
-const { Table } = require("typeorm");
+const {Table} = require("typeorm");
 
 module.exports = class createPoolsTable1626449863844 {
 
     async up(queryRunner) {
         queryRunner.createTable(new Table({
-            name: "Pools",
+            name: "pools",
             columns: [
                 {
                     name: "name",
-                    type: "text"
+                    type: "varchar",
+                    max: 255,
+                    isNullable: false,
+                    isPrimary: true
                 },
                 {
                     name: "ip",
-                    type: "text"
+                    type: "text",
+                    max: 15,
+                    isNullable: false
                 },
                 {
                     name: "port",
-                    type: "text"
+                    type: "int",
+                    max: 65535,
+                    unsigned: true,
+                    isNullable: false
                 },
                 {
-                    name: "Status",
-                    type: "text"
+                    name: "status",
+                    type: "int",
+                    max: 20,
+                    unsigned: true,
+                    isNullable: false
                 }
             ]
         }), true)
