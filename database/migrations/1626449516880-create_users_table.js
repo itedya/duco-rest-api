@@ -36,7 +36,7 @@ module.exports = class createUsersTable1626449516880 {
     }
 
     async down(queryRunner) {
-        queryRunner.dropTable("Users")
+        queryRunner.dropTable("users")
     }
 }
         

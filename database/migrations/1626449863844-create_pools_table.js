@@ -38,7 +38,7 @@ module.exports = class createPoolsTable1626449863844 {
     }
 
     async down(queryRunner) {
-        queryRunner.dropTable("Pools")
+        queryRunner.dropTable("pools")
     }
 }
         

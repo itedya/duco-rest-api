@@ -34,7 +34,7 @@ module.exports = class createBlocksTable1626455674160 {
     }
 
     async down(queryRunner) {
-        queryRunner.dropTable("")
+        queryRunner.dropTable("blocks")
     }
 }
         
