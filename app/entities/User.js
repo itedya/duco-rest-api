@@ -2,18 +2,18 @@ const { EntitySchema } = require('typeorm')
 
 module.exports = new EntitySchema({
     name: 'User',
-    tableName: 'Users',
+    tableName: 'users',
     columns: {
         username: {
-            type: "text",
+            type: "varchar",
             primary: true
         },
         password: {
-            type: "text",
+            type: "varchar",
             select: false
         },
         email: {
-            type: "text",
+            type: "varchar",
             select: false
         },
         balance: {
