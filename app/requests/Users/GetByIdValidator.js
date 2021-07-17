@@ -1,5 +1,5 @@
 const { param } = require("express-validator")
 
 module.exports = [
-    param("username").isLength({ min: 3, max: 64 })
+    param("id").isLength({ min: 36, max: 36 }).isUUID(4)
 ]
