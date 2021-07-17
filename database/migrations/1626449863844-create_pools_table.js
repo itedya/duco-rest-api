@@ -11,7 +11,6 @@ module.exports = class createPoolsTable1626449863844 {
                     type: "varchar",
                     max: 255,
                     isNullable: false,
-                    isPrimary: true
                 },
                 {
                     name: "ip",

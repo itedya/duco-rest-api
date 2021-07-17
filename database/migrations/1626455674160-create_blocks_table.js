@@ -1,4 +1,4 @@
-const { Table } = require("typeorm");
+const {Table} = require("typeorm");
 
 module.exports = class createBlocksTable1626455674160 {
 
@@ -10,7 +10,7 @@ module.exports = class createBlocksTable1626455674160 {
                     name: "hash",
                     type: "varchar",
                     max: 40,
-                    isNullable: false
+                    isPrimary: true
                 },
                 {
                     name: "timestamp",
@@ -18,9 +18,15 @@ module.exports = class createBlocksTable1626455674160 {
                     isNullable: false
                 },
                 {
-                    name: "finder",
+                    name: "user_id",
                     type: "varchar",
-                    max: 320,
+                    max: 36,
+                    isNullable: true
+                },
+                {
+                    name: "algorithm",
+                    type: "varchar",
+                    max: 120,
                     isNullable: false
                 },
                 {
@@ -28,6 +34,13 @@ module.exports = class createBlocksTable1626455674160 {
                     type: "real",
                     isNullable: false,
                     unsigned: true
+                }
+            ],
+            foreignKeys: [
+                {
+                    columnNames: ["user_id"],
+                    referencedColumnNames: ["id"],
+                    referencedTableName: "users"
                 }
             ]
         }), true)

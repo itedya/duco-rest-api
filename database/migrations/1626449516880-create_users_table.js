@@ -7,11 +7,19 @@ module.exports = class createUsersTable1626449516880 {
             name: "users",
             columns: [
                 {
+                    name: "id",
+                    type: "varchar",
+                    max: 36,
+                    isPrimary: true,
+                    isNullable: false,
+                    isUnique: true
+                },
+                {
                     name: "username",
                     type: "varchar",
                     max: 255,
                     isNullable: false,
-                    isPrimary: true
+                    isUnique: true
                 },
                 {
                     name: "password",
@@ -23,7 +31,8 @@ module.exports = class createUsersTable1626449516880 {
                     name: "email",
                     type: "varchar",
                     max: 320,
-                    isNullable: false
+                    isNullable: false,
+                    isUnique: true
                 },
                 {
                     name: "balance",
@@ -39,4 +48,3 @@ module.exports = class createUsersTable1626449516880 {
         queryRunner.dropTable("users")
     }
 }
-        
