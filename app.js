@@ -10,6 +10,7 @@ require('./plugins/typeorm').then(res => {
     const indexRouter = require('./routes/index');
     const authRouter = require('./routes/auth');
     const usersRouter = require('./routes/users');
+    const transactionsRouter = require('./routes/transactions');
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
@@ -17,6 +18,7 @@ require('./plugins/typeorm').then(res => {
     app.use('/', indexRouter);
     app.use('/auth', authRouter);
     app.use('/users', usersRouter);
+    app.use('/transactions', transactionsRouter);
 
     app.listen(3000, () => {
         console.log(`Server started! Listening on :3000`)
