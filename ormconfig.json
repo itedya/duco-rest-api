@@ -8,7 +8,7 @@
       "database/migrations/*.js"
     ],
     "entities": [
-      "app/entities/User.js"
+      "app/entities/*.js"
     ]
   }
 ]
