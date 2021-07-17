@@ -1,5 +1,5 @@
 # Duco REST API
-This repository is source code of Duino-Coin REST API.
+This repository is completely rewritten source code of Duino-Coin REST API.
 
 ## Local development
 
