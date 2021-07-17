@@ -1,0 +1,14 @@
+[
+  {
+    "name": "default",
+    "type": "sqlite",
+    "database": "database/database.db",
+    "synchronize": true,
+    "migrations": [
+      "database/migrations/*.js"
+    ],
+    "entities": [
+      "app/entities/User.js"
+    ]
+  }
+]
