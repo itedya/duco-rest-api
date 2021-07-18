@@ -1,16 +1,35 @@
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import fs from 'fs';
 
 dotenv.config();
 import {createConnection} from "typeorm";
-import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import {SnakeNamingStrategy} from "typeorm-naming-strategies";
 
 const app = express();
 
 app.use(morgan((tokens, req, res) => {
-    return `${tokens.method(req, res)} ${tokens.url(req, res)} | STATUS ${tokens.status(req, res)} | ` +
-        `IP ${req.ip} | ${tokens.res(req, res, 'content-length')} - ${tokens['response-time'](req, res)}ms`;
+    const date = new Date().toLocaleDateString('pl-PL', {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    });
+
+    const method = tokens.method(req, res);
+    const url = tokens.url(req, res);
+    const status = tokens.status(req, res);
+    const ip = req.ip;
+    const contentLength = tokens.res(req, res, 'content-length');
+    const responseTime = `${tokens['response-time'](req, res)}ms`
+
+    return `[${date}] | ${method} ${status} ${url} | IP ${ip} | ${contentLength} - ${responseTime}`;
+}, {
+    stream: fs.createWriteStream('access.log', { flags: 'a' })
 }))
 
 createConnection({
