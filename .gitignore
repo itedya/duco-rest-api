@@ -3,6 +3,7 @@ package-lock.json
 node_modules
 
 .env
+access.log
 
 src/database/databases/**/*
 src/database/database.db
