@@ -7,9 +7,15 @@ import jwt from 'jsonwebtoken';
 import UserRepository from '@/app/repositories/UserRepository';
 import JwtRepository from '@/app/repositories/JwtRepository';
 
-const getUser = (req: Request, res: Response) => {
+const getUser = async (req: Request, res: Response) => {
     try {
-        const user = req.user
+        const user = await UserRepository.findOneOrFail({
+            where: {id: req.user!.id},
+            relations: [
+                'transactions_from',
+                'transactions_to'
+            ]
+        });
 
         return res.json({result: user});
     } catch (e) {

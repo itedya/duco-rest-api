@@ -1,4 +1,5 @@
-import {Column, Entity} from "typeorm";
+import {Column, Entity, ManyToOne} from "typeorm";
+import User from "@/app/entities/User";
 
 @Entity("transactions")
 class Transaction {
@@ -20,6 +21,12 @@ class Transaction {
 
     @Column({type: "datetime"})
     timestamp: Date;
+
+    @ManyToOne(() => User, user => user.transactions_from)
+    from_user: User;
+
+    @ManyToOne(() => User, user => user.transactions_to)
+    to_user: User;
 }
 
 export default Transaction;

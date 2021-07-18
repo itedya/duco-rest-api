@@ -1,5 +1,6 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn, JoinColumn} from "typeorm";
 import Jwt from "@/app/entities/Jwt";
+import Transaction from "@/app/entities/Transaction";
 
 @Entity("users")
 class User {
@@ -33,6 +34,12 @@ class User {
 
     @OneToMany(() => Jwt, jwt => jwt.user)
     jwt_tokens: Jwt[];
+
+    @OneToMany(() => Transaction, transaction => transaction.from_user)
+    transactions_from: Transaction[];
+
+    @OneToMany(() => Transaction, transaction => transaction.to_user)
+    transactions_to: Transaction[];
 }
 
 export default User;

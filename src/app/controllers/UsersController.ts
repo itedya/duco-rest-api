@@ -47,8 +47,11 @@ const getUserById = async (req: Request, res: Response) => {
         try {
             body = {
                 result: await UserRepository.findOneOrFail({
-                    select: ['id', 'username', 'balance'],
-                    where: {id}
+                    where: {id},
+                    relations: [
+                        'transactions_from',
+                        'transactions_to'
+                    ]
                 })
             }
         } catch (e) {
@@ -92,7 +95,7 @@ const updateUser = async (req: Request, res: Response) => {
             .where({id})
             .execute();
 
-        let user = await UserRepository.findOneOrFail({select: ["id", "username", "email"], where: {id}});
+        let user = await UserRepository.findOneOrFail({where: {id}});
 
         return res.json({
             result: user
