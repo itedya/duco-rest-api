@@ -27,4 +27,4 @@ Copy ```.env.example``` file and rename it to ```.env```. Make sure all variable
 
 ### 4. Run
 
-``` npm start ```
+``` npm run dev ```
