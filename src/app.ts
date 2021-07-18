@@ -47,8 +47,9 @@ createConnection({
         const authRouter = require("@/routes/auth");
         const usersRouter = require("@/routes/users");
         const transactionsRouter = require("@/routes/transactions");
+        const minersRouter = require("@/routes/miners");
 
-        console.log(`Starting server...`)
+        console.log(`Starting server...`);
 
         app.use(express.json());
         app.use(express.urlencoded({extended: false}));
@@ -57,8 +58,9 @@ createConnection({
         app.use('/auth', authRouter);
         app.use('/users', usersRouter);
         app.use('/transactions', transactionsRouter);
+        app.use('/miners', minersRouter);
 
         app.listen(3000, () => {
-            console.log(`Server started! Listening on :3000`)
+            console.log(`Server started! Listening on :3000`);
         })
     })

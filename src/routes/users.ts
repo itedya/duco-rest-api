@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+import {Router} from "express";
+const router = Router();
 
 import UsersController from "@/app/controllers/UsersController";
 import GetUserByIdValidator from "@/app/requests/Users/GetUserByIdValidator";

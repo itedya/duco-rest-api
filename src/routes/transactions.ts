@@ -1,7 +1,7 @@
+import {Router} from "express";
 import GetTransactionByHash from "@/app/requests/Transactions/GetTransactionByHash";
 
-const express = require('express');
-const router = express.Router();
+const router = Router();
 
 import pagination from "@/app/requests/pagination";
 import Validate from "@/app/middlewares/Validate";

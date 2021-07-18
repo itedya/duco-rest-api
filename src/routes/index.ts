@@ -1,7 +1,6 @@
-import {Request, Response} from "express";
+import {Request, Response, Router} from "express";
 
-var express = require('express');
-var router = express.Router();
+const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ result: "OK" });

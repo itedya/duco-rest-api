@@ -1,4 +1,4 @@
-import express from "express";
+import {Router} from "express";
 
 import AuthController from "@/app/controllers/AuthController";
 import authenticateJWT from "@/app/middlewares/AuthenticateJWT";
@@ -8,7 +8,7 @@ import getLoggedInUserValidator from "@/app/requests/Auth/GetLoggedInUserValidat
 import loginValidator from "@/app/requests/Auth/LoginValidator";
 import registerValidator from "@/app/requests/Auth/RegisterValidator";
 
-const router = express.Router();
+const router = Router();
 
 router.get('/user', authenticateJWT, getLoggedInUserValidator, validate, AuthController.getUser);
 

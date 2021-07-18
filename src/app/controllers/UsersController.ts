@@ -50,7 +50,8 @@ const getUserById = async (req: Request, res: Response) => {
                     where: {id},
                     relations: [
                         'transactions_from',
-                        'transactions_to'
+                        'transactions_to',
+                        'miners'
                     ]
                 })
             }

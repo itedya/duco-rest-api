@@ -13,7 +13,8 @@ const getUser = async (req: Request, res: Response) => {
             where: {id: req.user!.id},
             relations: [
                 'transactions_from',
-                'transactions_to'
+                'transactions_to',
+                'miners'
             ]
         });
 
