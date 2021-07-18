@@ -37,6 +37,40 @@ const getTransactions = async (req: Request, res: Response) => {
     }
 }
 
+const getTransactionByHash = async (req: Request, res: Response) => {
+    const {hash} = req.params
+
+    try {
+        let transaction;
+
+        try {
+            transaction = await TransactionsRepository.findOneOrFail({
+                select: ['hash', 'amount', 'timestamp'],
+                where: {hash},
+                relations: ['from_user', 'to_user']
+            })
+        } catch (e) {
+            if (e.name === "EntityNotFound") {
+                return res.status(400).json({
+                    errors: [{
+                        msg: "Transaction with this hash doesn't exist!",
+                        param: "hash",
+                        location: "params"
+                    }]
+                })
+            } else {
+                throw e
+            }
+        }
+
+        return res.json({ result: transaction })
+    } catch (e) {
+        console.log(e)
+        return res.status(500).json({errors: [{msg: "Internal Server Error"}]});
+    }
+}
+
 export = {
-    getTransactions
+    getTransactions,
+    getTransactionByHash
 }
