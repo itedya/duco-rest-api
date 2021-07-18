@@ -16,7 +16,8 @@
     "ext": "ts, js"
   },
   "scripts": {
-    "start": "nodemon",
+    "start": "ts-node -r tsconfig-paths/register src/app.ts",
+    "dev": "nodemon",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "typeorm:run": "npm run typeorm migration:run"
   },
