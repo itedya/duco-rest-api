@@ -3,7 +3,7 @@ This repository is completely rewritten source code of Duino-Coin REST API.
 
 ## 🟥🟥🟥🟥 WARNING 🟥🟥🟥🟥
 
-**THIS PROJECT HAS NEW REDESIGNED DATABASE**. Old one was bad (no primary keys, no foreign keys, no unique attributes and so on). **New database won't fit to other services built for old database.** If project leaders decide to accept pull request, It is necessary to redesign services for new database.
+**THIS PROJECT HAS NEW REDESIGNED DATABASE**. Old one was bad (no primary keys, no foreign keys, no unique attributes and so on). **New database won't fit to other services built for old database.** If project leaders decide to accept pull request, It is necessary to update services for new database.
 
 ## 🟥🟥🟥🟥 WARNING 🟥🟥🟥🟥
 
