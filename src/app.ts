@@ -6,10 +6,11 @@ import fs from 'fs';
 dotenv.config();
 import {createConnection} from "typeorm";
 import {SnakeNamingStrategy} from "typeorm-naming-strategies";
+import Request from "@/interfaces/Request";
 
 const app = express();
 
-app.use(morgan((tokens, req, res) => {
+app.use(morgan((tokens, req: Request, res) => {
     const date = new Date().toLocaleDateString('pl-PL', {
         year: "numeric",
         month: "2-digit",
@@ -26,8 +27,9 @@ app.use(morgan((tokens, req, res) => {
     const ip = req.ip;
     const contentLength = tokens.res(req, res, 'content-length');
     const responseTime = `${tokens['response-time'](req, res)}ms`
+    const userId = req.user ? req.user.id : "NOT_LOGGED_IN"
 
-    return `[${date}] | ${method} ${status} ${url} | IP ${ip} | ${contentLength} - ${responseTime}`;
+    return `[${date}] | ${method} ${status} ${url} | IP ${ip} | ${contentLength} - ${responseTime} | USER_ID ${userId}`;
 }, {
     stream: fs.createWriteStream('access.log', { flags: 'a' })
 }))
