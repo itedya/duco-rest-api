@@ -1,7 +1,17 @@
 # Duco REST API
 This repository is completely rewritten source code of Duino-Coin REST API.
 
-## Local development
+## Things to check before pull request
+
+1. How much rounds bcrypt has set in tcp server, then set same amount in ```.env``` and ```.env.example```  file
+
+
+## Local development tools
+
+File ```insomnia.json``` is file with data to <a href="https://insomnia.rest/">insomnia</a> (program Postman-like).
+From it you can do requests to your local DuinoCoin REST API.
+
+## How to start local development
 
 ### 1. Install packages 
 
@@ -9,7 +19,7 @@ This repository is completely rewritten source code of Duino-Coin REST API.
 
 ### 2. Create Database
 
-``` typeorm migration:run ```
+``` npm run typeorm:run ```
 
 ### 3. Create ```.env``` file
 
@@ -18,7 +28,3 @@ Copy ```.env.example``` file and rename it to ```.env```. Make sure all variable
 ### 4. Run
 
 ``` npm start ```
-
-## Things to check before pull request
-
-1. How much rounds bcrypt has set in tcp server, then set same amount in ```.env``` and ```.env.example```  file
