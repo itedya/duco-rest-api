@@ -1,6 +1,12 @@
 # Duco REST API
 This repository is completely rewritten source code of Duino-Coin REST API.
 
+## 🟥🟥🟥🟥 WARNING 🟥🟥🟥🟥
+
+**THIS PROJECT HAS NEW REDESIGNED DATABASE**. Old one was bad (no primary keys, no foreign keys, no unique attributes and so on). **New database won't fit to other services built for old database.** If project leaders decide to accept pull request, It is necessary to update services for new database.
+
+## 🟥🟥🟥🟥 WARNING 🟥🟥🟥🟥
+
 ## Things to check before pull request
 
 1. How much rounds bcrypt has set in tcp server, then set same amount in ```.env``` and ```.env.example```  file
